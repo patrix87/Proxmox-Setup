@@ -19,4 +19,4 @@ rm SHA256SUMS SHA256SUMS.gpg
 wget -P ${iso_path} --content-disposition https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
 
 # Download Promox Backup Server
-wget -P ${iso_path} --content-disposition https://enterprise.proxmox.com/iso/proxmox-ve_8.3-1.iso
+wget -P ${iso_path} --content-disposition https://enterprise.proxmox.com/iso/proxmox-backup-server_3.3-1.iso
