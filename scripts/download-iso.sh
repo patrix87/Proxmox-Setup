@@ -14,5 +14,9 @@ else
     exit 1
 fi
 rm SHA256SUMS SHA256SUMS.gpg
+
 # Download the latest version of the VirtIO drivers ISO
 wget -P ${iso_path} --content-disposition https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
+
+# Download Promox Backup Server
+wget -P ${iso_path} --content-disposition https://enterprise.proxmox.com/iso/proxmox-ve_8.3-1.iso
