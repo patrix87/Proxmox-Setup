@@ -4,6 +4,8 @@ vm_pool=sata-870-qvo-1tb-01
 vm_disk=/var/lib/vz/template/iso/ubuntu-24.04-server-cloudimg-amd64.img
 vm_name=ubuntu-24
 # Modify the image
+apt update -y
+apt upgrade -y
 apt install libguestfs-tools -y
 virt-customize -a ${vm_disk} --install qemu-guest-agent
 # Create a new VM with the ID ${vm_id} and the name ${vm_name}
