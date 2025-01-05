@@ -43,6 +43,8 @@ token: *****************
 ## Create the linux server cloudinit template
 
 - `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/create-ubuntu-template.sh)"`
+- Add your Public SSH Key or Password to the Template Cloud-Init
+- Resize the Disk after cloning
 
 ## Upload the Windows Server ISO to Promox
 

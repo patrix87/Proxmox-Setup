@@ -1,22 +1,89 @@
 #!/bin/bash
+# Set the variables
 ubuntu_version="24.04"
-iso_path="/var/lib/vz/template/iso/"
-# Download the latest version of the Ubuntu ${ubuntu_version} cloud image to ${iso_path}
-wget -P ${iso_path} https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/ubuntu-${ubuntu_version}-server-cloudimg-amd64.img
-# Download the SHA256SUMS and SHA256SUMS.gpg files to ${iso_path}
-wget -P ${iso_path} https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/SHA256SUMS
-wget -P ${iso_path} https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/SHA256SUMS.gpg
-# Verify the SHA256SUMS file
-if (gpg --verify ${iso_path}SHA256SUMS.gpg ${iso_path}SHA256SUMS 2>&1 | grep "Good signature") ; then
-    echo "SHA256SUMS file is verified"
-else
-    echo "SHA256SUMS file is not verified"
+image_url=https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/ubuntu-${ubuntu_version}-server-cloudimg-amd64.img
+image_checksum_url=https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/SHA256SUMS
+image_gpg_url=https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/SHA256SUMS.gpg
+image_target_directory=/var/lib/vz/template/iso
+key_server=hkp://keyserver.ubuntu.com:80
+image_file=$(basename "$image_url")
+checksum_file=$(basename "$image_checksum_url")
+signature_file=$(basename "$image_gpg_url")
+other_iso=(
+    "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win-0.1.266.iso"
+    "https://enterprise.proxmox.com/iso/proxmox-backup-server_3.3-1.iso"
+)
+
+# Check if the target directory exists create it if it does not
+if [ ! -d "$image_target_directory" ]; then
+    mkdir -p "$image_target_directory"
+fi
+# Change directory to the target directory
+cd "$image_target_directory" || exit 1
+
+# Download the checksum files
+wget "${image_checksum_url}" -O "${checksum_file}"
+wget "${image_gpg_url}" -O "${signature_file}"
+
+# Verify the checksum files and capture the output to download the keys if the checksum files are not verified
+KEY=$(gpg --verify --keyid-format long --with-colons "$signature_file" "$checksum_file" 2>&1 | grep 'using RSA key' | awk '{print $5}')
+
+# Ensure the GPG key is present
+if ! gpg --list-keys "$KEY" > /dev/null 2>&1; then
+    echo "GPG key $KEY not found. Downloading..."
+    if ! gpg --keyserver "$key_server" --recv-keys "$KEY"; then
+        echo "Failed to download GPG key. Exiting."
+        exit 1
+    fi
+fi
+
+# Verify the checksum signature
+echo "Verifying checksum signature..."
+if ! gpg --verify "$signature_file" "$checksum_file"; then
+    echo "Checksum signature verification failed. Exiting."
     exit 1
 fi
+
+# Function to validate the image checksum
+validate_checksum() {
+    echo "Validating image file checksum..."
+    checksum_result=$(sha256sum -c "$checksum_file" 2>&1 | grep "$image_file")
+    if echo "$checksum_result" | grep -q ": OK"; then
+        echo "Image file checksum is valid. Validation successful!"
+        return 0
+    else
+        echo "Image file checksum validation failed!"
+        return 1
+    fi
+}
+
+
+# Check and validate the image file
+if [ -f "$image_file" ]; then
+    echo "Image file found. Validating..."
+    if ! validate_checksum; then
+        echo "Checksum failed. Re-downloading image file..."
+        wget "$image_url" -O "$image_file"
+        echo "Re-validating image file after download..."
+        if ! validate_checksum; then
+            echo "Validation failed even after re-downloading. Exiting."
+            exit 1
+        fi
+    fi
+else
+    echo "Image file not found. Downloading..."
+    wget "$image_url" -O "$image_file"
+    echo "Validating image file..."
+    if ! validate_checksum; then
+        echo "Image file validation failed after download. Exiting."
+        exit 1
+    fi
+fi
+
+# Cleanup the checksum and signature files
 rm SHA256SUMS SHA256SUMS.gpg
 
-# Download the latest version of the VirtIO drivers ISO
-wget -P ${iso_path} --content-disposition https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/latest-virtio/virtio-win.iso
-
-# Download Promox Backup Server
-wget -P ${iso_path} --content-disposition https://enterprise.proxmox.com/iso/proxmox-backup-server_3.3-1.iso
+# Download other ISOs
+for iso in "${other_iso[@]}"; do
+        wget "$iso" -O "$(basename "$iso")"
+done
