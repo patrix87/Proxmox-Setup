@@ -4,13 +4,19 @@
 - Change the root password via the ui
 - Create one LVM Volume for each disks
 
+## Authentication
+
+- Generate an ssh key pair with `ssh-keygen -t rsa`
+- Upload your public key to the server using:
+`type $env:USERPROFILE\.ssh\id_rsa.pub | ssh {IP-ADDRESS-OR-FQDN} "cat >> .ssh/authorized_keys"`
+
 ## Upload the required ISO to Proxmox
 
 - `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/download-iso.sh)"`
 
-## Run Post Install Scripts
+## Run Post [Install Scripts](https://community-scripts.github.io/ProxmoxVE/scripts?id=post-pve-install)
 
-- <https://community-scripts.github.io/ProxmoxVE/scripts?id=post-pve-install> from the built in PVE shell (Not SSH) (Yes to all)
+- From the built in PVE shell (Yes to all)
 - `bash -c "$(wget -qLO - https://github.com/community-scripts/ProxmoxVE/raw/main/misc/post-pve-install.sh)"`
 
 ## Setup Webhook notifications
@@ -49,9 +55,11 @@ token: *****************
 ## Upload the Windows Server ISO to Promox
 
 - Download ISO from : <https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025>
-- Create a basic VM and Mount the VirtIO ISO.
+- Create the template using the script:
+- `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/create-windows-template.sh)"`
 - Boot the VM and install the [VirtIO Driver](https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers#Using_the_ISO)
 - Install the [QEMU Guest Agent](https://pve.proxmox.com/wiki/Qemu-guest-agent)
 - Install any other base tools that you want in that Template
 - Run the Updates
-- Run Sysprep... (TODO)
+- Run Sysprep using `C:\Windows\System32\sysprep\sysprep /generalize /oobe /shutdown`
+- Convert to Template
