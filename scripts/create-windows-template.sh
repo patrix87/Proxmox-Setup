@@ -7,7 +7,7 @@ iso=/var/lib/vz/template/iso/WinServer2025_English_x64.iso
 virtio_iso=/var/lib/vz/template/iso/virtio-win-0.1.266.iso
 cores=4
 memory=4096
-disk_size=32
+disk_size=32g
 
 # Check if the VM with the same ID exists and delete it
 if qm list | grep -q "$id"; then
@@ -29,9 +29,9 @@ qm set $id --machine q35
 # Set the BIOS type to OVMF (UEFI)
 qm set $id --bios ovmf
 # Create a TPM state storage with version 2.0
-qm set $id --tpmstate0 ${storage}:32,version=v2.0
+qm set $id --tpmstate0 ${storage}:4m,version=v2.0
 # Create an EFI disk with raw format and pre-enrolled keys
-qm set $id --efidisk0 ${storage}:1,format=raw,efitype=4m,pre-enrolled-keys=1
+qm set $id --efidisk0 ${storage}:4m,format=raw,efitype=4m,pre-enrolled-keys=1
 # Create a SCSI disk with the specified size and raw format
 qm set $id --scsi0 ${storage}:$disk_size,format=raw
 # Set the CD-ROM drive to use the Windows ISO
