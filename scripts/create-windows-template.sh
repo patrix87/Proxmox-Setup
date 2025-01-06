@@ -7,7 +7,7 @@ iso=/var/lib/vz/template/iso/WinServer2025_English_x64.iso
 virtio_iso=/var/lib/vz/template/iso/virtio-win-0.1.266.iso
 cores=4
 memory=4096
-disk_size=32G
+disk_size=32
 
 # Check if the VM with the same ID exists and delete it
 if qm list | grep -q "$id"; then
@@ -25,7 +25,7 @@ qm set $id --net0 virtio,bridge=vmbr0
 # Set the SCSI controller type to VirtIO SCSI single
 qm set $id --scsihw virtio-scsi-single
 # Set the boot order to boot from the CD-ROM first
-qm set $id --boot order=cd0
+qm set $id --boot order=ide2;scsi0
 # Set the machine type to Q35
 qm set $id --machine q35
 # Set the BIOS type to OVMF (UEFI)
@@ -55,7 +55,9 @@ qm set $id --vga virtio
 # Display the VM configuration
 qm config $id
 
-echo "Windows Server 2025 VM Template ($VM_NAME) successfully created with ID $VM_ID."
+echo "Windows Server 2025 VM Template ($name) successfully created with ID $id."
 echo "Start the VM and proceed with Windows installation."
 echo "After installation, install the VirtIO drivers and the QEMU Agent from the VirtIO ISO."
 echo "Then run sysprep before converting the VM to a template."
+
+qm set 9001 --boot order=cdrom
