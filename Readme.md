@@ -61,5 +61,18 @@ token: *****************
 - Install the [QEMU Guest Agent](https://pve.proxmox.com/wiki/Qemu-guest-agent)
 - Install any other base tools that you want in that Template
 - Run the Updates
+- Remove Azure Arc Setup with `Remove-WindowsCapability -online -Name AzureArcSetup~~~~`
+- Remove Windows Admin Centre Setup `Remove-WindowsFeature -Name WindowsAdminCenterSetup`
+- Uninstall Paint and Feedback Hub
+- Enable RDP
+- Disable Firewall
+- Disable Microsoft Defender
+- Disable IE Enhanced Security Configuration
+- Set the TimeZone
+- Change the Hostname
+- Disable "Show more options" context menu with `reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve`
+- Install Powershell 7
+- Install Git
+- Shutdown and Clone the VM here as a starting point for upgrades.
 - Run Sysprep using `C:\Windows\System32\sysprep\sysprep /generalize /oobe /shutdown`
 - Convert to Template
