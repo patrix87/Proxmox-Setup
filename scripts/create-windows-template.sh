@@ -39,7 +39,7 @@ qm set $id --ide2 $iso,media=cdrom
 # Attach the VirtIO ISO as a CD-ROM on IDE3
 qm set $id --ide3 $virtio_iso,media=cdrom
 # Set the boot order to boot from the CD-ROM first
-qm set $id --boot order=ide2;scsi0
+qm set $id --boot order='ide2;scsi0'
 # Enable the QEMU agent and allow fstrim on cloned disks
 qm set $id --agent enabled=1,fstrim_cloned_disks=1
 # Enable the tablet device for better mouse support
