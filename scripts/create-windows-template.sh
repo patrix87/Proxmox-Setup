@@ -24,8 +24,6 @@ qm set $id --memory $memory
 qm set $id --net0 virtio,bridge=vmbr0
 # Set the SCSI controller type to VirtIO SCSI single
 qm set $id --scsihw virtio-scsi-single
-# Set the boot order to boot from the CD-ROM first
-qm set $id --boot order=ide2;scsi0
 # Set the machine type to Q35
 qm set $id --machine q35
 # Set the BIOS type to OVMF (UEFI)
@@ -34,6 +32,14 @@ qm set $id --bios ovmf
 qm set $id --tpmstate0 ${storage}:32,version=v2.0
 # Create an EFI disk with raw format and pre-enrolled keys
 qm set $id --efidisk0 ${storage}:1,format=raw,efitype=4m,pre-enrolled-keys=1
+# Create a SCSI disk with the specified size and raw format
+qm set $id --scsi0 ${storage}:$disk_size,format=raw
+# Set the CD-ROM drive to use the Windows ISO
+qm set $id --ide2 $iso,media=cdrom
+# Attach the VirtIO ISO as a CD-ROM on IDE3
+qm set $id --ide3 $virtio_iso,media=cdrom
+# Set the boot order to boot from the CD-ROM first
+qm set $id --boot order=ide2;scsi0
 # Enable the QEMU agent and allow fstrim on cloned disks
 qm set $id --agent enabled=1,fstrim_cloned_disks=1
 # Enable the tablet device for better mouse support
@@ -44,12 +50,6 @@ qm set $id --ostype win11
 qm set $id --hotplug disk,network,usb
 # Enable NUMA (Non-Uniform Memory Access)
 qm set $id --numa 1
-# Create a SCSI disk with the specified size and raw format
-qm set $id --scsi0 ${storage}:$disk_size,format=raw
-# Set the CD-ROM drive to use the Windows ISO
-qm set $id --cdrom $iso
-# Attach the VirtIO ISO as a CD-ROM on IDE3
-qm set $id --ide3 $virtio_iso,media=cdrom
 # Set the VGA type to VirtIO
 qm set $id --vga virtio
 # Display the VM configuration
