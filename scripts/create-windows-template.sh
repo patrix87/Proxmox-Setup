@@ -59,5 +59,3 @@ echo "Windows Server 2025 VM Template ($name) successfully created with ID $id."
 echo "Start the VM and proceed with Windows installation."
 echo "After installation, install the VirtIO drivers and the QEMU Agent from the VirtIO ISO."
 echo "Then run sysprep before converting the VM to a template."
-
-qm set 9001 --boot order=cdrom
