@@ -70,9 +70,8 @@ token: *****************
 - Disable IE Enhanced Security Configuration
 - Set the TimeZone
 - Change the Hostname
+- Set the Administrator Password
 - Disable "Show more options" context menu with `reg add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve`
 - Install Powershell 7
 - Install Git
-- Shutdown and Clone the VM here as a starting point for upgrades.
-- Run Sysprep using `C:\Windows\System32\sysprep\sysprep /generalize /oobe /shutdown`
 - Convert to Template
