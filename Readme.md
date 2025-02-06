@@ -57,6 +57,8 @@ token: *****************
 - Download ISO from : <https://www.microsoft.com/en-us/evalcenter/download-windows-server-2025>
 - Create the template using the script:
 - `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/create-windows-template.sh)"`
+- Or Restore it from the disk files with:
+- `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/restore-windows-template-from-volumes.sh)"`
 - Boot the VM and install the [VirtIO Driver](https://pve.proxmox.com/wiki/Windows_VirtIO_Drivers#Using_the_ISO)
 - Install the [QEMU Guest Agent](https://pve.proxmox.com/wiki/Qemu-guest-agent)
 - Install any other base tools that you want in that Template
