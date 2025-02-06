@@ -1,6 +1,6 @@
 #!/bin/bash
 # Set the variables
-id=9001
+id=9002
 name=windows-2025
 storage=sata-870-qvo-1tb-01
 iso=/var/lib/vz/template/iso/Windows-Server-2025-Eval-X64-EN-US.iso
