@@ -1,6 +1,6 @@
 #!/bin/bash
 # Set the variables
-ubuntu_version="24.04"
+ubuntu_version="24.04.2"
 image_url=https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/ubuntu-${ubuntu_version}-server-cloudimg-amd64.img
 image_checksum_url=https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/SHA256SUMS
 image_gpg_url=https://cloud-images.ubuntu.com/releases/${ubuntu_version}/release/SHA256SUMS.gpg
@@ -10,8 +10,8 @@ image_file=$(basename "$image_url")
 checksum_file=$(basename "$image_checksum_url")
 signature_file=$(basename "$image_gpg_url")
 other_iso=(
-    "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.266-1/virtio-win-0.1.266.iso"
-    "https://enterprise.proxmox.com/iso/proxmox-backup-server_3.3-1.iso"
+    "https://fedorapeople.org/groups/virt/virtio-win/direct-downloads/archive-virtio/virtio-win-0.1.271-1/virtio-win-0.1.271.iso"
+    "https://enterprise.proxmox.com/iso/proxmox-backup-server_3.4-1.iso"
 )
 
 # Check if the target directory exists create it if it does not
@@ -56,7 +56,6 @@ validate_checksum() {
         return 1
     fi
 }
-
 
 # Check and validate the image file
 if [ -f "$image_file" ]; then

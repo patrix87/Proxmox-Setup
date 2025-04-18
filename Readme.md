@@ -1,8 +1,9 @@
-# Here are my personnal Proxmox Setup Notes
+# Here are my personnal Proxmox Cluster Setup Notes
 
 - Install Proxmox Virtual Environment : <https://www.proxmox.com/en/proxmox-virtual-environment/get-started>
 - Change the root password via the ui
-- Create one LVM Volume for each disks
+- Create one LVM Volume for each disks following the Google Sheet.
+- Modify the Network Configuration following the Google Sheet.
 
 ## Authentication
 
@@ -10,14 +11,19 @@
 - Upload your public key to the server using:
 `type $env:USERPROFILE\.ssh\id_rsa.pub | ssh {IP-ADDRESS-OR-FQDN} "cat >> .ssh/authorized_keys"`
 
-## Upload the required ISO to Proxmox
+## Run Post Custom Post Install Script
 
-- `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/download-iso.sh)"`
+- From the built in PVE shell
+- `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/setup-script.sh)"`
 
-## Run Post [Install Scripts](https://community-scripts.github.io/ProxmoxVE/scripts?id=post-pve-install)
+## HA Clustering Setup
 
-- From the built in PVE shell (Yes to all)
-- `bash -c "$(wget -qLO - https://github.com/community-scripts/ProxmoxVE/raw/main/misc/post-pve-install.sh)"`
+- Create the Cluster on node1
+- Join the Cluster on node2
+- Setup the Qdevice on the NAS
+- Join the Cluster with the QDevice
+- Validate sync ... ?
+
 
 ## Setup Webhook notifications
 
@@ -45,6 +51,10 @@ BODY:
 SECRETS: 
 token: *****************
 ```
+
+## Upload the required ISO to Proxmox
+
+- `bash -c "$(wget -qLO - https://github.com/patrix87/Proxmox-Setup/raw/main/scripts/download-iso.sh)"`
 
 ## Create the linux server cloudinit template
 
@@ -77,3 +87,6 @@ token: *****************
 - Install Powershell 7
 - Install Git
 - Convert to Template
+
+## Open Tofu stuff to create actual VMs
+

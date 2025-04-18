@@ -3,7 +3,7 @@
 id=9000
 name=ubuntu-24
 storage=sata-870-qvo-1tb-01
-disk=/var/lib/vz/template/iso/ubuntu-24.04-server-cloudimg-amd64.img
+disk=/var/lib/vz/template/iso/ubuntu-24.04.2-server-cloudimg-amd64.img
 cores=4
 memory=4096
 user=user
